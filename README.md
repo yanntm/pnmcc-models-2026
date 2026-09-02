@@ -8,7 +8,7 @@ The files are distributed here : [Generated Page](https://yanntm.github.io/pnmcc
 
 * a set of individual model instances and formulas, packaged as a tar.gz per instance.
 * a single archive [oracle.tgz](https://yanntm.github.io/pnmcc-models-2026/oracle.tar.gz) containing all consensus property verdicts 
- and a set of *StateSpace* examination verdict files built from the results of 2020 gold medalist in the category Tedd. 
+ and a set of *StateSpace* examination verdict files built from the results of Tedd, gold medalist of the StateSpace category in 2026. 
  Note the oracles may contain "partial" oracles that contain a question mark `?` for unknown answers that were asked in the contest. 
  These `?` queries should be harder to solve, and we do not have a consensus/accepted answer in 2026.
  
