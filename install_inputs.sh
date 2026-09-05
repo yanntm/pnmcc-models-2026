@@ -53,9 +53,11 @@ fi
 
 # fill the oracle skeletons with the consensus verdicts
 # all results available
-cat raw-result-analysis.csv | grep -v StateSpace | grep -v UpperBound | cut -d ',' -f2,3,16 | sed 's/\s//g' | sort | uniq | ../csv_to_control.pl
+# The file is passed a second time as an argument : the three columns piped in
+# carry the consensus, the whole file is what says which tools produced it.
+cat raw-result-analysis.csv | grep -v StateSpace | grep -v UpperBound | cut -d ',' -f2,3,16 | sed 's/\s//g' | sort | uniq | ../csv_to_control.pl raw-result-analysis.csv
 # UpperBounds => do not remove whitespace
-cat raw-result-analysis.csv | grep UpperBound | cut -d ',' -f2,3,16 | sort | uniq | ../csv_to_control.pl
+cat raw-result-analysis.csv | grep UpperBound | cut -d ',' -f2,3,16 | sort | uniq | ../csv_to_control.pl raw-result-analysis.csv
 
  
 # Patching bad consensus
@@ -63,10 +65,12 @@ cat raw-result-analysis.csv | grep UpperBound | cut -d ',' -f2,3,16 | sort | uni
 # It is the only mismatch/consensus issue found so far in 2026 : it is also the only
 # UpperBounds query of the whole edition where ITS-Tools answers inf and the consensus
 # is finite. No other tool could answer this query.
-sed -i -e "s/BugTracking-PT-q3m256-UpperBounds-12 1/BugTracking-PT-q3m256-UpperBounds-12 +inf/" oracle/BugTracking-PT-q3m256-UB.out
+# The techniques go with the verdict : the consensus 1 was 2025-gold's alone,
+# +inf is ITS-Tools' answer.
+sed -i -E "s/(BugTracking-PT-q3m256-UpperBounds-12) 1 TECHNIQUES.*/\\1 +inf TECHNIQUES ORACLE2026 ITSTOOLS/" oracle/BugTracking-PT-q3m256-UB.out
 
 # When another one is found, patch the oracle .out file before archiving, e.g.:
-# sed -i -e "s/CryptoMiner-COL-D03N000-UpperBounds-11 0/CryptoMiner-COL-D03N000-UpperBounds-11 +inf/" oracle/CryptoMiner-COL-D03N000-UB.out
+# sed -i -E "s/(CryptoMiner-COL-D03N000-UpperBounds-11) 0 TECHNIQUES.*/\\1 +inf TECHNIQUES ORACLE2026 ITSTOOLS/" oracle/CryptoMiner-COL-D03N000-UB.out
 
 #rm -f raw-result-analysis.csv*
 

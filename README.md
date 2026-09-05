@@ -18,18 +18,29 @@ In particular, these files are used for regression and performance testing of [I
 ## Content of oracle files
 
 The oracle files are simply a "virtual" trace of a correct answer of a tool, in expected MCC format. 
-The first line defines the model instance and examination, then the results are provided with "ORACLE2026" as technique used.
+The first line defines the model instance and examination, then the results are provided with "ORACLE2026" as technique used, followed by the tools that answered that very value in the contest.
 
 e.g.
 
 ```
 ARMCacheCoherence-PT-none ReachabilityFireability
-FORMULA ARMCacheCoherence-PT-none-ReachabilityFireability-00 FALSE TECHNIQUES ORACLE2026
-FORMULA ARMCacheCoherence-PT-none-ReachabilityFireability-01 FALSE TECHNIQUES ORACLE2026
-FORMULA ARMCacheCoherence-PT-none-ReachabilityFireability-02 TRUE TECHNIQUES ORACLE2026
-FORMULA ARMCacheCoherence-PT-none-ReachabilityFireability-03 FALSE TECHNIQUES ORACLE2026
+FORMULA ARMCacheCoherence-PT-none-ReachabilityFireability-00 FALSE TECHNIQUES ORACLE2026 ITSTOOLS TAPAAL TY 2025GOLD
+FORMULA ARMCacheCoherence-PT-none-ReachabilityFireability-01 FALSE TECHNIQUES ORACLE2026 ITSTOOLS TAPAAL
+FORMULA ARMCacheCoherence-PT-none-ReachabilityFireability-02 TRUE TECHNIQUES ORACLE2026 ITSTOOLS
+FORMULA ARMCacheCoherence-PT-none-ReachabilityFireability-03 ? TECHNIQUES ORACLE2026
 ... file shortened...
 ```
+
+A verdict of `?` cites no tool: nobody answered it. A verdict backed by a single
+name rests on that tool alone, which is worth knowing before treating it as
+ground truth -- and it is how the one consensus error we found this year showed
+up. `BVT-2026` is the union of the other rows and is never cited; `2025GOLD` is
+the previous edition's medallist, rerun by the organizers, and for a handful of
+values it is the only tool that answered.
+
+The names come from the tool column of `raw-result-analysis.csv`, upper cased
+with punctuation removed. StateSpace oracles come from Tedd alone (see below)
+and keep `TEDD2026`.
 
 ## Sources and notes
 
