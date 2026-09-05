@@ -6,9 +6,11 @@
 # answered these yet, the files exist so that a run can be checked for the
 # atoms it left unanswered, and a "?" is replaced once a verdict is trusted.
 #
-# Atoms are named by definition order in model.pnml, t<i> and p<i>, and the
-# lines carry the keyword the tool prints instead of FORMULA :
-#   QLIVE t0 ?      STABLE p0 ?      BOUND p0 ?
+# The file is the header line, the keyword the tool prints in place of
+# FORMULA, then the vector of verdicts in definition order of model.pnml,
+# wrapped at 80 columns, whitespace being insignificant :
+#   QLIVE / STABLE   one character per object, T F or ?
+#   BOUND            one token per object, an integer, inf or ?
 # Coloured instances are skipped.
 #
 # usage : make_total_oracles.sh <model directory> <output directory>
@@ -32,7 +34,12 @@ P=$(echo "$counts" | awk '/place/ {print $1}')
 T=$(echo "$counts" | awk '/transition/ {print $1}')
 P=${P:-0} ; T=${T:-0}
 
+# n question marks, packed, wrapped at 80 columns
+marks() { head -c $1 /dev/zero | tr '\0' '?' | fold -w 80 ; echo ; }
+# n question mark tokens, wrapped at 80 columns
+tokens() { yes '?' | head -n $1 | paste -sd' ' | fold -s -w 80 | sed 's/ $//' ; }
+
 mkdir -p "$outdir"
-{ echo "$model QuasiLivenessAll" ; seq 0 $((T-1)) | sed 's/^/QLIVE t/; s/$/ ?/' ; } > "$outdir/$model-QLA.out"
-{ echo "$model StableMarkingAll" ; seq 0 $((P-1)) | sed 's/^/STABLE p/; s/$/ ?/' ; } > "$outdir/$model-SMA.out"
-{ echo "$model UpperBoundsAll" ; seq 0 $((P-1)) | sed 's/^/BOUND p/; s/$/ ?/' ; } > "$outdir/$model-UBA.out"
+{ echo "$model QuasiLivenessAll" ; echo "QLIVE" ; marks $T ; } > "$outdir/$model-QLA.out"
+{ echo "$model StableMarkingAll" ; echo "STABLE" ; marks $P ; } > "$outdir/$model-SMA.out"
+{ echo "$model UpperBoundsAll" ; echo "BOUND" ; tokens $P ; } > "$outdir/$model-UBA.out"

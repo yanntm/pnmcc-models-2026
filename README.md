@@ -46,20 +46,22 @@ and keep `TEDD2026`.
 
 `QuasiLivenessAll`, `StableMarkingAll` and `UpperBoundsAll` are ITS-Tools
 examinations that ask one question per transition or per place of a P/T net,
-instead of the sixteen formulas of the contest. Their oracles are shipped apart
-as [oracle-total.tar.gz](https://yanntm.github.io/pnmcc-models-2026/oracle-total.tar.gz),
-which unpacks into the same `oracle/` folder as `<instance>-QLA.out`,
-`<instance>-SMA.out` and `<instance>-UBA.out`. Every verdict is `?` : nobody has
-answered these yet, the files exist so that a run can be checked for the atoms
-it left unanswered, and a `?` is replaced once a verdict is trusted.
+instead of the sixteen formulas of the contest. Their oracles sit in the same
+archive as `<instance>-QLA.out`, `<instance>-SMA.out` and `<instance>-UBA.out`.
+Every verdict is `?` : nobody has answered these yet, the files exist so that a
+run can be checked for the atoms it left unanswered, and a `?` is replaced once
+a verdict is trusted.
 
-The lines carry the keyword the tool prints in place of `FORMULA`, and the atoms
-are named by definition order in `model.pnml`, `t<i>` and `p<i>` :
+The file is the header line, then the keyword the tool prints in place of
+`FORMULA`, then the vector of verdicts in definition order of `model.pnml`,
+wrapped at 80 columns with whitespace insignificant : one character per object
+for the boolean examinations, `T`, `F` or `?`, one token per place for the
+bounds, an integer, `inf` or `?`.
 
 ```
 Peterson-PT-5 QuasiLivenessAll
-QLIVE t0 ?
-QLIVE t1 ?
+QLIVE
+????????????????????????????????????????????????????????????????????????????????
 ```
 
 Built by `make_total_oracles.sh` as the archives are repackaged. Coloured
