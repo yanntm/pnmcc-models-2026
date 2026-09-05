@@ -41,6 +41,22 @@ We used the "collect_tedd.sh" script that lives in this repo to build these orac
 Note that Tedd had a 100% reliability score, so these values should be trustable.  
 Currently these are verdicts from the 2026 edition of the contest.
 
+## Repaired models
+
+A few models in the contest archives are not valid PNML. The competition never
+rejected them, so a tool either copes with the broken file or loses the model
+outright. We repair them once, here, rather than ask every tool to be bug
+compatible: `patch_models.pl` runs over each model as the archives are
+repackaged, and documents each repair together with the symptom that motivated
+it. A repair is only ever allowed to turn a file that no conforming parser can
+read into the file its author plainly meant, and must leave a sound model
+untouched.
+
+Currently repaired: the `FileSystem-COL-*` instances wrap the second argument of
+a `numberof` in two nested `<subterm>` elements. A parser reading `<subterm>` as
+"one argument" then hands `numberof` one argument where it needs two, and the
+model dies at parse time before any analysis runs.
+
 We have a similar project to host the files for previous years, going back to 2017,e.g. https://github.com/yanntm/pnmcc-models-2021
 These repositories are curated, consensus verdicts that are incorrect are diagnosed and patched (see the edits made in the https://github.com/yanntm/pnmcc-models-2021/blob/master/install_inputs.sh#L57 script).
 

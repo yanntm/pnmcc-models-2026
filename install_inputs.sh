@@ -28,6 +28,11 @@ do
 	model=$(echo $i | sed 's/.tgz//g')
 #	echo "Treating : $model"
 	rm $i
+	# A few models in the contest archives are not valid PNML and no conforming
+	# parser can read them. Repair them here, once, rather than leave every tool
+	# to be bug compatible with a broken file. See patch_models.pl for the list
+	# of repairs and the reason for each.
+	../../patch_models.pl $model
 	tar czf $i $model/
 	../../make_oracle_skeletons.pl $model ../oracle
 	rm -rf $model/
