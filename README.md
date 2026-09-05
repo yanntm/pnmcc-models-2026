@@ -42,6 +42,29 @@ The names come from the tool column of `raw-result-analysis.csv`, upper cased
 with punctuation removed. StateSpace oracles come from Tedd alone (see below)
 and keep `TEDD2026`.
 
+## Oracles of the total examinations
+
+`QuasiLivenessAll`, `StableMarkingAll` and `UpperBoundsAll` are ITS-Tools
+examinations that ask one question per transition or per place of a P/T net,
+instead of the sixteen formulas of the contest. Their oracles are shipped apart
+as [oracle-total.tar.gz](https://yanntm.github.io/pnmcc-models-2026/oracle-total.tar.gz),
+which unpacks into the same `oracle/` folder as `<instance>-QLA.out`,
+`<instance>-SMA.out` and `<instance>-UBA.out`. Every verdict is `?` : nobody has
+answered these yet, the files exist so that a run can be checked for the atoms
+it left unanswered, and a `?` is replaced once a verdict is trusted.
+
+The lines carry the keyword the tool prints in place of `FORMULA`, and the atoms
+are named by definition order in `model.pnml`, `t<i>` and `p<i>` :
+
+```
+Peterson-PT-5 QuasiLivenessAll
+QLIVE t0 ?
+QLIVE t1 ?
+```
+
+Built by `make_total_oracles.sh` as the archives are repackaged. Coloured
+instances have none.
+
 ## Sources and notes
 
 The files produced by this project are created using the official archives taken from the [MCC website](https://mcc.lip6.fr/archives/), we basically decompress the virtual machine image to extract the model + formula files, 

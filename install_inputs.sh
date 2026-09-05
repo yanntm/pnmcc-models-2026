@@ -17,6 +17,10 @@ mv INPUTS-2026 INPUTS
 # formula names into oracle skeletons : the naming is not homogeneous across
 # examinations nor stable across editions, so it must be read, never rebuilt.
 mkdir oracle
+# The total examinations (one atom per place or transition) get their own
+# oracles, all "?", built by make_total_oracles.sh from the same unpacked model
+# and shipped apart as oracle-total.tar.gz : 400 MB of text, 70 MB compressed.
+mkdir total
 
 # remove strange MacOS specific stuff 'LIBARCHIVE.xattr.com.apple.quarantine'
 echo "Patching tgz archives"
@@ -35,6 +39,7 @@ do
 	../../patch_models.pl $model
 	tar czf $i $model/
 	../../make_oracle_skeletons.pl $model ../oracle
+	../../make_total_oracles.sh $model ../total
 	rm -rf $model/
 done
 
@@ -82,6 +87,9 @@ tar xzf ../../oracleSS.tar.gz
 cd ..
 tar czf oracle.tar.gz  oracle/
 rm -rf oracle/
+# same layout as oracle.tar.gz, so both unpack into one oracle/ folder
+tar czf oracle-total.tar.gz --transform 's|^total/|oracle/|' total/
+rm -rf total/
 
 tree -H "." > index.html
 
