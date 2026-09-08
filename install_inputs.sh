@@ -81,6 +81,15 @@ cd oracle
 # shortened there), so we use ../../oracleSS.tar.gz, built offline with collect_tedd.sh
 # from the full 2026 contest logs (Tedd, gold medalist of the category).
 tar xzf ../../oracleSS.tar.gz
+# The total examinations (QuasiLivenessAll, StableMarkingAll, UpperBoundsAll)
+# have no contest consensus at all: the skeletons above are entirely "?". The
+# vectors in ../../oracleTotals.tar.gz come from our own experiments with
+# ITS-Tools and the projects around it, merged over two campaigns that agreed
+# object by object, cross-checked against the consensus of the ordinary
+# examinations and against our own answers to those. They are a regression
+# oracle, not contest truth; the provenance and the figures are in the
+# README-totals.txt the archive carries.
+tar xzf ../../oracleTotals.tar.gz
 cd ..
 tar czf oracle.tar.gz  oracle/
 rm -rf oracle/

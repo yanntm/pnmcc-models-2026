@@ -100,7 +100,8 @@ def main():
         t = totals[suffix]
         t[0] += 1; t[1] += len(pub); t[2] += before; t[3] += filled; t[4] += len(conflicts)
     for s, (n, atoms, before, filled, conf) in totals.items():
-        print(f"{s}: {n} vectors, {atoms} atoms, known {before} -> {before + filled} ({(before + filled) / atoms:.3f}), conflicts {conf}", file=sys.stderr)
+        share = f"{(before + filled) / atoms:.3f}" if atoms else "n/a"
+        print(f"{s}: {n} vectors, {atoms} atoms, known {before} -> {before + filled} ({share}), conflicts {conf}", file=sys.stderr)
     if args.report:
         with open(args.report, "w", newline="") as f:
             w = csv.DictWriter(f, ["vector", "atoms", "known before", "filled", "known after", "conflicts"])
