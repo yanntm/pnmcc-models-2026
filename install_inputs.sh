@@ -65,12 +65,21 @@ cat raw-result-analysis.csv | grep UpperBound | cut -d ',' -f2,3,16 | sort | uni
  
 # Patching bad consensus
 # Manually inspected, consensus error due to trusting Gold25 over ITS-Tools.
-# It is the only mismatch/consensus issue found so far in 2026 : it is also the only
+# It was the first mismatch/consensus issue found in 2026 : it is also the only
 # UpperBounds query of the whole edition where ITS-Tools answers inf and the consensus
 # is finite. No other tool could answer this query.
 # The techniques go with the verdict : the consensus 1 was 2025-gold's alone,
 # +inf is ITS-Tools' answer.
 sed -i -E "s/(BugTracking-PT-q3m256-UpperBounds-12) 1 TECHNIQUES.*/\\1 +inf TECHNIQUES ORACLE2026 ITSTOOLS/" oracle/BugTracking-PT-q3m256-UB.out
+
+# GPPP-PT-C0010N1000000000 CTLCardinality-2024-08 : contradicts Tapaal/Gold2025, defended by TY,
+# verified from a counter-example trace. The formula is E[_3PG >= 2467342475 U AG(B)] with _3PG
+# empty initially, so it is AG(B) at the initial marking, and a 52-transition firing sequence
+# reaches a marking where B is false (Ru5P=0 < Pyr=1, E4P=1, FBP=0 < b2=27, GAP=1); the sequence
+# was replayed with arbitrary-precision integers. The initial marking of ATP is 4e9 and fourteen
+# of the sixteen formulas carry a constant above 2^31-1 : 32-bit arithmetic is suspect on this
+# instance. VerifyPN 4.3.0 reproduces the wrong TRUE in 0.1 s.
+sed -i -E "s/(GPPP-PT-C0010N1000000000-CTLCardinality-2024-08) TRUE TECHNIQUES.*/\\1 FALSE TECHNIQUES ORACLE2026 TY/" oracle/GPPP-PT-C0010N1000000000-CTLC.out
 
 # When another one is found, patch the oracle .out file before archiving, e.g.:
 # sed -i -E "s/(CryptoMiner-COL-D03N000-UpperBounds-11) 0 TECHNIQUES.*/\\1 +inf TECHNIQUES ORACLE2026 ITSTOOLS/" oracle/CryptoMiner-COL-D03N000-UB.out
