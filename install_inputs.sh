@@ -1,5 +1,6 @@
 #! /bin/bash
 
+set -euo pipefail
 set -x
 
 mkdir website
@@ -76,6 +77,8 @@ sed -i -E "s/(BugTracking-PT-q3m256-UpperBounds-12) 1 TECHNIQUES.*/\\1 +inf TECH
 
 #rm -f raw-result-analysis.csv*
 
+../check_oracles.py --record-totals oracle > total-shapes.json
+
 cd oracle
 # StateSpace oracles cannot come from raw-result-analysis.csv (large numbers are
 # shortened there), so we use ../../oracleSS.tar.gz, built offline with collect_tedd.sh
@@ -91,6 +94,7 @@ tar xzf ../../oracleSS.tar.gz
 # README-totals.txt the archive carries.
 tar xzf ../../oracleTotals.tar.gz
 cd ..
+../check_oracles.py oracle raw-result-analysis.csv total-shapes.json
 tar czf oracle.tar.gz  oracle/
 rm -rf oracle/
 

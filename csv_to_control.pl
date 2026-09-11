@@ -59,6 +59,12 @@ sub tokens {
     $field =~ s/^\s+//;
     $field =~ s/\s+$//;
     return () if $field eq "";
+    # Boolean vectors may contain blanks between parenthesized consensus
+    # verdicts. Whitespace separates numeric bounds, not Boolean positions.
+    if ($field =~ /^[TF?\s]+$/) {
+        $field =~ s/\s//g;
+        return split //, $field;
+    }
     return split /\s+/, $field if $field =~ /\s/;
     return split //, $field if length($field) == 16;
     return ($field);

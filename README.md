@@ -48,9 +48,10 @@ and keep `TEDD2026`.
 examinations that ask one question per transition or per place of a P/T net,
 instead of the sixteen formulas of the contest. Their oracles sit in the same
 archive as `<instance>-QLA.out`, `<instance>-SMA.out` and `<instance>-UBA.out`.
-Every verdict is `?` : nobody has answered these yet, the files exist so that a
-run can be checked for the atoms it left unanswered, and a `?` is replaced once
-a verdict is trusted.
+The build first generates one `?` per object, then overlays the answers in
+`oracleTotals.tar.gz`. These answers come from our own tool campaigns, rather
+than contest consensus; the archive includes `README-totals.txt` with their
+provenance. Unanswered atoms remain `?`, preserving the complete vector.
 
 The file is the header line, then the keyword the tool prints in place of
 `FORMULA`, then the vector of verdicts in definition order of `model.pnml`,
@@ -105,3 +106,17 @@ The source model and formulas are extracted from the [Model checking Contest](ht
 
 Packaging and development by Yann Thierry-Mieg, working at LIP6, Sorbonne Université, CNRS.
 This project source code is released under the terms of [GNU GPL v3](https://www.gnu.org/licenses/gpl-3.0.html).
+
+## Oracle build validation
+
+The build stops on failed commands and pipelines. Before packaging,
+`check_oracles.py` verifies that all ordinary examinations present in the raw
+results have files, that every ordinary examination family contains known
+verdicts, and that each total-examination vector retains its generated header,
+keyword and number of objects after the checked-in overlay. Total vectors may
+remain partially unknown; these are incomplete answers, not missing objects.
+`--record-totals DIRECTORY` records the generated shapes before the overlay.
+
+Boolean tool/consensus vectors are parsed by position after removing parentheses
+and whitespace. Whitespace between parenthesized consensus values does not split
+those vectors into chunks. Numeric bound vectors remain whitespace-separated.
